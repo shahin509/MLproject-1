@@ -16,7 +16,7 @@ def get_requirements(file_path:str)->List[str]:
 
 setup(
 name='MLproject-1',
-version='0.0.1',
+version='0.0.2',
 author='Shahin',
 author_email='hossainshahin230@gmail.com',
 packages=find_packages(),
