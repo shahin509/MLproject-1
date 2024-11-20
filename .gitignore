@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+# Environments
+.artifacts
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
 # Distribution / packaging
 .Python
 build/
@@ -119,16 +129,7 @@ celerybeat-schedule
 celerybeat.pid
 
 # SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+*.sage.py 
 
 # Spyder project settings
 .spyderproject
