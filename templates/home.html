@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Performance Indicator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(120deg, #2980b9, #6dd5fa, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .login {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 350px; /* Reduced form size */
+            width: 90%;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 8px rgba(41, 128, 185, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            padding: 0.7rem;
+            background-color: #2980b9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #217db5;
+            transform: translateY(-3px);
+        }
+
+        /* Prediction Result Bar */
+        .prediction-bar {
+            position: fixed;
+            top: 50%;
+            right: -100%;
+            transform: translateY(-50%);
+            background-color: #ffffff; /* Set background to white for better contrast */
+            color: #2980b9; /* Set text color to blue */
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            transition: all 0.5s ease-in-out;
+            opacity: 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            font-size: 1.2rem; /* Increase font size for better readability */
+            font-weight: bold;
+        }
+
+        .prediction-bar.show {
+            right: 10%;
+            opacity: 1;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2980b9;
+            margin-top: 2rem;
+        }
+
+        /* Add animation for fading in and sliding effect */
+    </style>
+</head>
+<body>
+
+    <div class="login">
+        <h1>Student Exam Performance Indicator</h1>
+        <form action="{{ url_for('predict_datapoint')}}" method="post">
+            <h1><legend>Student Exam Performance Prediction</legend></h1>
+            
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <select class="form-control" name="gender" required>
+                    <option selected disabled value="">Select your Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Race or Ethnicity</label>
+                <select class="form-control" name="ethnicity" required>
+                    <option selected disabled value="">Select Ethnicity</option>
+                    <option value="group A">Group A</option>
+                    <option value="group B">Group B</option>
+                    <option value="group C">Group C</option>
+                    <option value="group D">Group D</option>
+                    <option value="group E">Group E</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Parental Level of Education</label>
+                <select class="form-control" name="parental_level_of_education" required>
+                    <option selected disabled value="">Select Parent Education</option>
+                    <option value="associate's degree">Associate's Degree</option>
+                    <option value="bachelor's degree">Bachelor's Degree</option>
+                    <option value="high school">High School</option>
+                    <option value="master's degree">Master's Degree</option>
+                    <option value="some college">Some College</option>
+                    <option value="some high school">Some High School</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Lunch Type</label>
+                <select class="form-control" name="lunch" required>
+                    <option selected disabled value="">Select Lunch Type</option>
+                    <option value="free/reduced">Free/Reduced</option>
+                    <option value="standard">Standard</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Test Preparation Course</label>
+                <select class="form-control" name="test_preparation_course" required>
+                    <option selected disabled value="">Select Test Course</option>
+                    <option value="none">None</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Writing Score (out of 100)</label>
+                <input class="form-control" type="number" name="writing_score" placeholder="Enter your Writing Score" min="0" max="100" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Reading Score (out of 100)</label>
+                <input class="form-control" type="number" name="reading_score" placeholder="Enter your Reading Score" min="0" max="100" required />
+            </div>
+
+            <div class="mb-3">
+                <input class="btn" type="submit" value="Predict your Math Score" />
+            </div>
+        </form>
+    </div>
+
+    <!-- Prediction result bar -->
+    <div class="prediction-bar" id="predictionResult">
+        <h2>The prediction is {{ results }}</h2>
+    </div>
+
+    <script>
+        // Show the prediction result after form submission
+        const predictionResult = document.getElementById('predictionResult');
+        
+        // Use a timeout to simulate the appearance of the result
+        setTimeout(() => {
+            predictionResult.classList.add('show');
+        }, 500); // 500ms delay to show the result smoothly
+    </script>
+
+</body>
+</html>
